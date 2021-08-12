@@ -6,11 +6,11 @@ const mode = document.getElementById('jsMode');
 const saveBtn = document.getElementById('jsSave');
 let filling = false;
 const INITIAL_COLOR ='#2c2c2c'
-canvas.width=700;
-canvas.height=700; 
+canvas.width=500;
+canvas.height=500; 
 
 ctx.fillStyle ='white';
-ctx.fillRect(0,0,700,700);
+ctx.fillRect(0,0,500,500);
 ctx.strokeStyle = INITIAL_COLOR;
 ctx.fillStyle = INITIAL_COLOR;
 ctx.lineWidth=2.5;
@@ -55,7 +55,7 @@ function handleModeClick(event){
     }
 }
 function handleCanvasClick(event){
-    if (filling){ctx.fillRect(0,0,700,700);}
+    if (filling){ctx.fillRect(0,0,500,500);}
 }
 function handleCM(event) {
     event.preventDefault();
