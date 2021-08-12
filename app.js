@@ -1,12 +1,19 @@
 const canvas = document.getElementById('jsCanvas');
 const ctx = canvas.getContext("2d");
-
+const colors = document.getElementsByClassName("jsColor");
+const range = document.getElementById("jsRange");
+const mode = document.getElementById('jsMode');
+const saveBtn = document.getElementById('jsSave');
+let filling = false;
+const INITIAL_COLOR ='#2c2c2c'
 canvas.width=700;
 canvas.height=700; 
 
-ctx.strokeStyle = '#2c2c2c';
+ctx.fillStyle ='white';
+ctx.fillRect(0,0,700,700);
+ctx.strokeStyle = INITIAL_COLOR;
+ctx.fillStyle = INITIAL_COLOR;
 ctx.lineWidth=2.5;
-
 let painting =false;
 
 function stopPainting(){
@@ -23,7 +30,6 @@ function onMouseMove(event){
         ctx.beginPath();
         ctx.moveTo(x,y);
     } else{
-        console.log('create line in',x,y);
         ctx.lineTo(x,y);
         ctx.stroke();
     }
@@ -34,10 +40,54 @@ function onMouseDown(event){
 function onMouseUP(event){
     stopPainting();
 }
+function changeColor(event){
+    const color = event.target.style.backgroundColor;
+    ctx.fillStyle=color;
+    ctx.strokeStyle=color;
+}
+function handleModeClick(event){
+    if(filling === true) {
+        filling = false;
+        mode.innerText ='Fill'; 
+    } else{
+        filling = true;
+        mode.innerText = "Paint";
+    }
+}
+function handleCanvasClick(event){
+    if (filling){ctx.fillRect(0,0,700,700);}
+}
+function handleCM(event) {
+    event.preventDefault();
+}
+function handleSave(){
+    const image = canvas.toDataURL('image/jpeg');
+    const link = document.createElement("a");
+    link.href = image;
+    link.download = "PaintJS[EXPORT]";
+    link.click();
 
+}
 if(canvas){
     canvas.addEventListener('mousemove',onMouseMove);
     canvas.addEventListener('mousedown',startPainting);
     canvas.addEventListener('mouseup',stopPainting);
     canvas.addEventListener('mouseleave',stopPainting);
+    canvas.addEventListener('click',handleCanvasClick);
+    canvas.addEventListener('contextmenu',handleCM);
+}
+Array.from(colors).forEach(color => color.addEventListener('click',changeColor));
+function handleRangeChange(event){
+    const size=event.target.value;
+    ctx.lineWidth=size;
+}
+
+if (range) {
+    range.addEventListener("input",handleRangeChange)
+}
+if (mode) {
+    mode.addEventListener("click",handleModeClick);
+}
+if (saveBtn) {
+    saveBtn.addEventListener("click",handleSave);
 }
